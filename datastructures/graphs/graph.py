@@ -3,11 +3,11 @@ import random
 
 class Graph:
 
-    def __init__(self, adjacency_matrix=None, random_graph=True):
-        if random_graph:
-            self.__adjacency_matrix = [[0] * 6 for _ in range(6)]
-            for i in range(6):
-                for j in range(6):
+    def __init__(self, num_nodes=6, adjacency_matrix=None):
+        if not adjacency_matrix:
+            self.__adjacency_matrix = [[0] * num_nodes for _ in range(num_nodes)]
+            for i in range(num_nodes):
+                for j in range(num_nodes):
                     self.__adjacency_matrix[i][j] = round(random.randint(0, 1))
         else:
             self.__adjacency_matrix = adjacency_matrix
