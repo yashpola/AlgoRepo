@@ -8,9 +8,8 @@ from graph import Graph
 from node import Node
 
 
-def bfs(graph: Graph, source: int, target: int) -> list[int]:
+def bfs(graph: Graph, source: int, target: int, no_repeats=True) -> list[int] | None:
     g = graph.get_adjacency_matrix()
-
     path = []
     frontier = deque()
     visited = []
@@ -27,12 +26,16 @@ def bfs(graph: Graph, source: int, target: int) -> list[int]:
             path.reverse()
             return path
 
-        neighbors = [node for node in range(6) if g[current.val][node] >= 1]
+        neighbors = [node for node in range(len(g)) if g[current.val][node] >= 1]
         for neighbor in neighbors:
-            if neighbor not in visited:
-                next = Node(neighbor, current)
-                visited.append(neighbor)
-                frontier.append(next)
+            if no_repeats:
+                if neighbor not in visited:
+                    next = Node(neighbor, current)
+                    visited.append(neighbor)
+                    frontier.append(next)
+                continue
+            next = Node(neighbor, current)
+            frontier.append(next)
     return None
 
 
