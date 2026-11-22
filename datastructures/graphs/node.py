@@ -1,10 +1,13 @@
+from __future__ import annotations
+
+
 class Node:
-    def __init__(self, val, parent=None):
+    def __init__(self, val: int, parent: Node | None = None) -> None:
         self.val = val
         self.parent = parent
 
-    def get_parent(self):
+    def get_parent(self) -> Node | None:
         return self.parent
 
     def to_string(self) -> str:
-        print(f"[Val: {self.val}]")
+        return f"[Val: {self.val}]"

@@ -1,18 +1,20 @@
 from collections import deque
-
+from pathlib import Path
 import sys
 
-sys.path.insert(0, "/Users/yashpola/Repositories/AlgoRepo/datastructures/graphs")
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from graph import Graph
-from node import Node
+from datastructures.graphs.graph import Graph
+from datastructures.graphs.node import Node
 
 
-def bfs(graph: Graph, source: int, target: int, no_repeats=True) -> list[int] | None:
+def bfs(
+    graph: Graph, source: int, target: int, no_repeats: bool = True
+) -> list[int] | None:
     g = graph.get_adjacency_matrix()
-    path = []
-    frontier = deque()
-    visited = []
+    path: list[int] = []
+    frontier: deque[Node] = deque()
+    visited: list[int] = []
 
     src = Node(source)
     frontier.append(src)
@@ -20,9 +22,10 @@ def bfs(graph: Graph, source: int, target: int, no_repeats=True) -> list[int] | 
     while len(frontier) != 0:
         current = frontier.popleft()
         if current.val == target:
-            while current != None:
-                path.append(current.val)
-                current = current.get_parent()
+            node: Node | None = current
+            while node is not None:
+                path.append(node.val)
+                node = node.get_parent()
             path.reverse()
             return path
 
@@ -30,26 +33,25 @@ def bfs(graph: Graph, source: int, target: int, no_repeats=True) -> list[int] | 
         for neighbor in neighbors:
             if no_repeats:
                 if neighbor not in visited:
-                    next = Node(neighbor, current)
+                    next_node = Node(neighbor, current)
                     visited.append(neighbor)
-                    frontier.append(next)
+                    frontier.append(next_node)
                 continue
-            next = Node(neighbor, current)
-            frontier.append(next)
+            next_node = Node(neighbor, current)
+            frontier.append(next_node)
     return None
 
 
-def main():
+def main() -> None:
     # Graph (V, E) with uniform edge cost of 1 if edge (u, v) in E
     graph = Graph(
-        [
+        adjacency_matrix=[
             [0, 1, 1, 0, 0, 0],
             [0, 0, 0, 1, 0, 0],
             [0, 1, 0, 0, 1, 0],
             [0, 0, 1, 0, 0, 1],
             [0, 0, 0, 0, 0, 1],
             [0, 0, 0, 0, 0, 0],
-        ],
-        False,
+        ]
     )
     print(bfs(graph, 0, 5))

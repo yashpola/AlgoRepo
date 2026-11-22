@@ -1,11 +1,11 @@
+from pathlib import Path
 import sys
+from typing import cast
 import numpy as np
 
-sys.path.insert(0, "/Users/yashpola/Repositories/AlgoRepo/algorithms/flow")
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-sys.path.insert(0, "/Users/yashpola/Repositories/AlgoRepo/algorithms/minimumcut")
-
-from maxflow import max_flow
+from algorithms.flow.maxflow import max_flow
 
 
 def expand_graph_to_network(o_g: list[list[int]]) -> list[list[int]]:
@@ -28,17 +28,17 @@ def expand_graph_to_network(o_g: list[list[int]]) -> list[list[int]]:
     # sink has no self-loop
     ndarray[ndarray.shape[1] - 1, ndarray.shape[1] - 1] = 0
 
-    return ndarray
+    return cast(list[list[int]], ndarray.tolist())
 
 
 def bipartite_matching(
     graph: list[list[int]],
-) -> list[tuple[int]]:
+) -> int:
     network: list[list[int]] = expand_graph_to_network(graph)
-    return max_flow(network.tolist(), 0, len(network) - 1)[0]
+    return max_flow(network, 0, len(network) - 1)[0]
 
 
-def test_1():
+def test_1() -> None:
     max_matching = bipartite_matching(
         [
             [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
